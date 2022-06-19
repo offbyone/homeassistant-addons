@@ -1,6 +1,6 @@
 name: "IoT Certbot"
 description: "Configure certbot using an AWS IoT device identity + Route 53 DNS"
-version: "1.0.2"
+version: "1.0.3"
 slug: iot_certbot
 init: false
 startup: once
