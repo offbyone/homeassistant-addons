@@ -4,7 +4,6 @@ url: https://github.com/offbyone/homeassistant-addons/iot-certbot
 version: "1.0.5"
 slug: iot_certbot
 init: false
-boot: auto
 startup: once
 arch:
   - aarch64
