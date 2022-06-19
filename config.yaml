@@ -1,0 +1,40 @@
+name: "IoT Certbot"
+description: "Configure certbot using an AWS IoT device identity + Route 53 DNS"
+version: "0.0.3"
+slug: iot_certbot
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+
+map:
+  - ssl:rw
+  - config
+
+options:
+  domains:
+    - null
+  email: null
+  keyfile: privkey.pem
+  certfile: fullchain.pem
+  challenge: http
+  iot:
+    thing_name: null
+    role_alias: null
+    endpoint_url: null
+
+schema:
+  domains:
+    - str
+  email: email
+  keyfile: str
+  certfile: str
+  acme_root_ca_cert: str?
+  acme_server: url?
+  iot:
+    thing_name: str
+    role_alias: str
+    endpoint_url: str

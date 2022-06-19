@@ -1,0 +1,58 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start sshd service if enabled
+# ==============================================================================
+CERT_DIR=/data/letsencrypt
+WORK_DIR=/data/workdir
+PROVIDER_ARGUMENTS=()
+ACME_CUSTOM_SERVER_ARGUMENTS=()
+
+EMAIL=$(bashio::config 'email')
+DOMAINS=$(bashio::config 'domains')
+KEYFILE=$(bashio::config 'keyfile')
+CERTFILE=$(bashio::config 'certfile')
+ACME_SERVER=$(bashio::config 'acme_server')
+ACME_ROOT_CA=$(bashio::config 'acme_root_ca_cert')
+
+PROPAGATION_SECONDS=60
+if bashio::config.exists 'dns.propagation_seconds'; then
+    PROPAGATION_SECONDS="$(bashio::config 'dns.propagation_seconds')"
+fi
+bashio::log.info "Use propagation seconds: ${PROPAGATION_SECONDS}"
+
+# ensure our current credentials are up to date
+/opt/iot/bin/update-credentials.sh
+
+# Source our current credentials
+AWS_CONFIG_FILE=/opt/iot/credentials/default
+export AWS_CONFIG_FILE
+PROVIDER_ARGUMENTS+=("--dns-route53")
+
+if bashio::config.has_value 'acme_server' ; then
+    ACME_CUSTOM_SERVER_ARGUMENTS+=("--server" "${ACME_SERVER}")
+
+    if bashio::config.has_value 'acme_root_ca_cert'; then
+      echo "${ACME_ROOT_CA}" > /tmp/root-ca-cert.crt
+      # Certbot will automatically open the filepath contained in REQUESTS_CA_BUNDLE for extra CA cert
+      export REQUESTS_CA_BUNDLE=/tmp/root-ca-cert.crt
+    fi
+fi
+
+# Gather all domains into a plaintext file
+DOMAIN_ARR=()
+for line in $DOMAINS; do
+    DOMAIN_ARR+=(-d "$line")
+done
+echo "$DOMAINS" > /data/domains.gen
+
+certbot certonly --non-interactive --keep-until-expiring --expand \
+    --email "$EMAIL" --agree-tos \
+    --config-dir "$CERT_DIR" --work-dir "$WORK_DIR" \
+    --preferred-challenges "dns" "${DOMAIN_ARR[@]}" "${PROVIDER_ARGUMENTS[@]}" \
+    --preferred-chain "ISRG Root X1"
+
+# Get the last modified cert directory and copy the cert and private key to store
+# shellcheck disable=SC2012
+CERT_DIR_LATEST="$(ls -td $CERT_DIR/live/*/ | head -1)"
+cp "${CERT_DIR_LATEST}privkey.pem" "/ssl/$KEYFILE"
+cp "${CERT_DIR_LATEST}fullchain.pem" "/ssl/$CERTFILE"

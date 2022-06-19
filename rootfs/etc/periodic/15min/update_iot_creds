@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+/opt/iot/bin/update-credentials.sh
