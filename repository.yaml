@@ -1,0 +1,4 @@
+# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
+name: offby1's Home Assistant add-on repository
+url: "https://github.com/offbyone/homeassistant-addons"
+maintainer: Chris Rose <offline@offby1.net>
