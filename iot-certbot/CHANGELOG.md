@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.0.7
+
+- update the build to set the right image
+
 ## 1.0.6
 
 - renew the certificate daily
