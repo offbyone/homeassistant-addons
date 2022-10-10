@@ -1,7 +1,7 @@
 name: "IoT Certbot"
 description: "Configure certbot using an AWS IoT device identity + Route 53 DNS"
 url: https://github.com/offbyone/homeassistant-addons/iot-certbot
-version: "1.0.5"
+version: "1.0.6"
 slug: iot_certbot
 init: false
 startup: once

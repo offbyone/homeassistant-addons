@@ -1,5 +1,13 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.0.6
+
+- renew the certificate daily
+
+## 1.0.5
+
+- fix for a busy-wait problem
+
 ## 1.0.4
 
 - only set to manual boot
