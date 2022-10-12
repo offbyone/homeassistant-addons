@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.0.8
+
+- jebus, I _hope_ this will actually wait forever now.
+
 ## 1.0.7
 
 - update the build to set the right image

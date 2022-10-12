@@ -57,5 +57,5 @@ CERT_DIR_LATEST="$(ls -td $CERT_DIR/live/*/ | head -1)"
 cp "${CERT_DIR_LATEST}privkey.pem" "/ssl/$KEYFILE"
 cp "${CERT_DIR_LATEST}fullchain.pem" "/ssl/$CERTFILE"
 
-# We can sleep for an hour after this; hourly is plenty to get new certs
-sleep $(bashio::config 'interval' 3600)
+# wait forever; we have periodic services running
+exec tail -f /dev/null
