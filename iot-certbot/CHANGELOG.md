@@ -1,8 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
-## 1.0.8
+## 1.0.8, 1.0.9
 
 - jebus, I _hope_ this will actually wait forever now.
+- 1.0.8 was lost in fuckery from the builds
 
 ## 1.0.7
 
