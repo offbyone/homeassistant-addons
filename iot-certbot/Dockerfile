@@ -12,20 +12,23 @@ ARG \
 RUN \
     set -x \
     && apk add --no-cache --update \
+        augeas \
+        curl \
         libffi \
         musl \
         openssl \
-        curl \
-        python3 \
         py3-pip \
+        python3 \
     && apk add --no-cache --virtual .build-dependencies \
+        augeas-dev \
         build-base \
+        cargo \
         libffi-dev \
         musl-dev \
         openssl-dev \
-        cargo \
         python3-dev \
-    && pip3 install --no-cache-dir --find-links \
+    && python3 -mvenv /opt/certbot \
+    && /opt/certbot/bin/python -mpip install --no-cache-dir --find-links \
         "https://wheels.home-assistant.io/alpine-$(cut -d '.' -f 1-2 < /etc/alpine-release)/${BUILD_ARCH}/" \
         cryptography==${CRYPTOGRAPHY_VERSION} \
         certbot==${CERTBOT_VERSION} \
@@ -34,3 +37,6 @@ RUN \
 
 # Copy data
 COPY rootfs /
+
+# force certbot binary into the "right" place
+RUN sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
