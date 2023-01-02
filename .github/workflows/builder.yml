@@ -25,7 +25,8 @@ jobs:
 
       - name: Get changed files
         id: changed_files
-        uses: jitterbit/get-changed-files@v1
+        # pinning out of paranoia, this is the modern-node fork of jitterbit/get-changed-files
+        uses: masesgroup/retrieve-changed-files@076a92699259d81d1c607bd91f0e1e9d45fd3151
 
       - name: Find add-on directories
         id: addons
