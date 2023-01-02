@@ -39,4 +39,4 @@ RUN \
 COPY rootfs /
 
 # force certbot binary into the "right" place
-RUN sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
