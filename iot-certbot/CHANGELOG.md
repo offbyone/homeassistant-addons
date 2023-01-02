@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.0.10
+
+Fixed the path for renewing certs
+
 ## 1.0.8, 1.0.9
 
 - jebus, I _hope_ this will actually wait forever now.
