@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-#
-# Source our current credentials
-AWS_CONFIG_FILE=/opt/iot/credentials/default
-export AWS_CONFIG_FILE
-
-certbot renew \
-    --config-dir=/data/letsencrypt \
-    --work-dir=/data/workdir

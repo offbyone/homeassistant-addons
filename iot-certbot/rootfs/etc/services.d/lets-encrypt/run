@@ -56,6 +56,3 @@ certbot certonly --non-interactive --keep-until-expiring --expand \
 CERT_DIR_LATEST="$(ls -td $CERT_DIR/live/*/ | head -1)"
 cp "${CERT_DIR_LATEST}privkey.pem" "/ssl/$KEYFILE"
 cp "${CERT_DIR_LATEST}fullchain.pem" "/ssl/$CERTFILE"
-
-# wait forever; we have periodic services running
-exec tail -f /dev/null
