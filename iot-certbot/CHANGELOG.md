@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.0
+
+Stop trying to run periodically, depend on automations
+
 ## 1.0.10, 1.0.11, 1.0.12
 
 Fixed the path for renewing certs
