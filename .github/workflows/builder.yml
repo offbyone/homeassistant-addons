@@ -21,12 +21,13 @@ jobs:
       changed: ${{ steps.changed_addons.outputs.changed }}
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v4
 
       - name: Get changed files
         id: changed_files
-        # pinning out of paranoia, this is the modern-node fork of jitterbit/get-changed-files
-        uses: masesgroup/retrieve-changed-files@076a92699259d81d1c607bd91f0e1e9d45fd3151
+        # pinning out of paranoia; this is the modern-node fork of jitterbit/get-changed-files
+        # at v3.0.0
+        uses: masesgroup/retrieve-changed-files@491e80760c0e28d36ca6240a27b1ccb8e1402c13
 
       - name: Find add-on directories
         id: addons
@@ -37,7 +38,11 @@ jobs:
         run: |
           declare -a changed_addons
           for addon in ${{ steps.addons.outputs.addons }}; do
-            if [[ "${{ steps.changed_files.outputs.all }}" =~ $addon ]]; then
+            # if one of the changed files was this action, we retry all the builds
+            if [[ "${{ steps.changed_files.outputs.all }}" =~ '.github/workflows/.*\.yml' ]]; then
+              changed_addons+=("\"${addon}\",");
+              echo "Including ${addon} because the build action changed"
+            elif [[ "${{ steps.changed_files.outputs.all }}" =~ $addon ]]; then
               for file in ${{ env.MONITORED_FILES }}; do
                   if [[ "${{ steps.changed_files.outputs.all }}" =~ $addon/$file ]]; then
                     if [[ ! "${changed_addons[@]}" =~ $addon ]]; then
@@ -59,10 +64,39 @@ jobs:
           else
             echo "No add-on had any monitored files changed (${{ env.MONITORED_FILES }})";
           fi
+  test:
+    needs: init
+    runs-on: ubuntu-latest
+    if: needs.init.outputs.changed == 'true' && github.event_name == 'pull_request'
+    name: Verify ${{ matrix.addon }} add-on before build/publish
+    strategy:
+      matrix:
+        addon: ${{ fromJson(needs.init.outputs.changed_addons) }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Get information
+        id: info
+        uses: home-assistant/actions/helpers/info@master
+        with:
+          path: "./${{ matrix.addon }}"
+
+      - name: Test ${{ matrix.addon }} add-on
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --test \
+            --all \
+            --target /data/${{ matrix.addon }} \
+            --image "${{ matrix.addon }}" \
+            --docker-hub "ghcr.io/${{ github.repository_owner }}"
+
   build:
     needs: init
     runs-on: ubuntu-latest
-    if: needs.init.outputs.changed == 'true'
+    if: needs.init.outputs.changed == 'true' && github.event_name != 'pull_request'
     name: Build ${{ matrix.arch }} ${{ matrix.addon }} add-on
     strategy:
       matrix:
@@ -71,7 +105,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get information
         id: info
@@ -98,7 +132,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: env.BUILD_ARGS != '--test'
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -106,7 +140,7 @@ jobs:
 
       - name: Build ${{ matrix.addon }} add-on
         if: steps.check.outputs.build_arch == 'true'
-        uses: home-assistant/builder@2022.11.0
+        uses: home-assistant/builder@2023.09.0
         with:
           args: |
             ${{ env.BUILD_ARGS }} \

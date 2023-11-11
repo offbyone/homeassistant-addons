@@ -1,5 +1,12 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.1
+
+- Switched to a forever-running script in `run`
+- bump the build base image
+- bump cryptography to 41.0.5
+- bump certbot to 2.7.4
+
 ## 1.1.0
 
 Stop trying to run periodically, depend on automations
