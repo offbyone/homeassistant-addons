@@ -1,10 +1,15 @@
 ---
 build_from:
-  aarch64: ghcr.io/home-assistant/aarch64-base-python:3.9-alpine3.14
-  amd64: ghcr.io/home-assistant/amd64-base-python:3.9-alpine3.14
-  armhf: ghcr.io/home-assistant/armhf-base-python:3.9-alpine3.14
-  armv7: ghcr.io/home-assistant/armv7-base-python:3.9-alpine3.14
-  i386: ghcr.io/home-assistant/i386-base-python:3.9-alpine3.14
+  aarch64: "ghcr.io/home-assistant/aarch64-base:3.15"
+  amd64: "ghcr.io/home-assistant/amd64-base:3.15"
+  armhf: "ghcr.io/home-assistant/armhf-base:3.15"
+  armv7: "ghcr.io/home-assistant/armv7-base:3.15"
+  i386: "ghcr.io/home-assistant/i386-base:3.15"
+labels:
+  org.opencontainers.image.title: "Home Assistant Add-on: AWS IOT Certbot"
+  org.opencontainers.image.description: "Use AWS IOT and LetsEncrpyt for DNS challenge certs"
+  org.opencontainers.image.source: "https://github.com/offbyone/homeassistant-addons"
+  org.opencontainers.image.licenses: "BSD"
 args:
-  CRYPTOGRAPHY_VERSION: 39.0.0
-  CERTBOT_VERSION: 2.1.0
+  CRYPTOGRAPHY_VERSION: 41.0.5
+  CERTBOT_VERSION: 2.7.4

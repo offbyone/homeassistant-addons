@@ -1,4 +1,5 @@
 #!/usr/bin/env bashio
+# -*- shell-script -*-
 # ==============================================================================
 # Take down the S6 supervision tree when letsencrypt fails
 # s6-overlay docs: https://github.com/just-containers/s6-overlay

@@ -1,0 +1,5 @@
+{
+  "email": "le-iot-ha-addon-dev@example.com",
+  "domains": ["a.b.c"],
+  "acme_server": "https://acme-staging-v02.api.letsencrypt.org/directory"
+}
