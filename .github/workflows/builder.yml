@@ -21,12 +21,13 @@ jobs:
       changed: ${{ steps.changed_addons.outputs.changed }}
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v4
 
       - name: Get changed files
         id: changed_files
         # pinning out of paranoia, this is the modern-node fork of jitterbit/get-changed-files
-        uses: masesgroup/retrieve-changed-files@076a92699259d81d1c607bd91f0e1e9d45fd3151
+        # at v3.0.0
+        uses: masesgroup/retrieve-changed-files@491e80760c0e28d36ca6240a27b1ccb8e1402c13
 
       - name: Find add-on directories
         id: addons
@@ -71,7 +72,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get information
         id: info
@@ -98,7 +99,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: env.BUILD_ARGS != '--test'
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -106,7 +107,7 @@ jobs:
 
       - name: Build ${{ matrix.addon }} add-on
         if: steps.check.outputs.build_arch == 'true'
-        uses: home-assistant/builder@2022.11.0
+        uses: home-assistant/builder@2023.09.0
         with:
           args: |
             ${{ env.BUILD_ARGS }} \
