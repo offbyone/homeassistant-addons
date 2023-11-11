@@ -25,7 +25,7 @@ jobs:
 
       - name: Get changed files
         id: changed_files
-        # pinning out of paranoia, this is the modern-node fork of jitterbit/get-changed-files
+        # pinning out of paranoia; this is the modern-node fork of jitterbit/get-changed-files
         # at v3.0.0
         uses: masesgroup/retrieve-changed-files@491e80760c0e28d36ca6240a27b1ccb8e1402c13
 
