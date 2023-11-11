@@ -64,10 +64,39 @@ jobs:
           else
             echo "No add-on had any monitored files changed (${{ env.MONITORED_FILES }})";
           fi
+  test:
+    needs: init
+    runs-on: ubuntu-latest
+    if: needs.init.outputs.changed == 'true' && github.event_name == 'pull_request'
+    name: Verify ${{ matrix.addon }} add-on before build/publish
+    strategy:
+      matrix:
+        addon: ${{ fromJson(needs.init.outputs.changed_addons) }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Get information
+        id: info
+        uses: home-assistant/actions/helpers/info@master
+        with:
+          path: "./${{ matrix.addon }}"
+
+      - name: Test ${{ matrix.addon }} add-on
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --test \
+            --all \
+            --target /data/${{ matrix.addon }} \
+            --image "${{ matrix.addon }}" \
+            --docker-hub "ghcr.io/${{ github.repository_owner }}"
+
   build:
     needs: init
     runs-on: ubuntu-latest
-    if: needs.init.outputs.changed == 'true'
+    if: needs.init.outputs.changed == 'true' && github.event_name != 'pull_request'
     name: Build ${{ matrix.arch }} ${{ matrix.addon }} add-on
     strategy:
       matrix:
@@ -109,19 +138,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test ${{ matrix.addon }} add-on
-        if: steps.check.outputs.build_arch == 'true' && github.event_name == 'pull_request'
-        uses: home-assistant/builder@master
-        with:
-          args: |
-            --test \
-            --all \
-            --target /data/${{ matrix.addon }} \
-            --image "${{ matrix.addon }}" \
-            --docker-hub "ghcr.io/${{ github.repository_owner }}"
-
       - name: Build ${{ matrix.addon }} add-on
-        if: steps.check.outputs.build_arch == 'true' && github.event_name != 'pull_request'
+        if: steps.check.outputs.build_arch == 'true'
         uses: home-assistant/builder@2023.09.0
         with:
           args: |
