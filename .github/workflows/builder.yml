@@ -39,7 +39,7 @@ jobs:
           declare -a changed_addons
           for addon in ${{ steps.addons.outputs.addons }}; do
             # if one of the changed files was this action, we retry all the builds
-            if [[ "${{ steps.changed_files.outputs.all }}" =~ .github/workflows/builder.yml ]]; then
+            if [[ "${{ steps.changed_files.outputs.all }}" =~ '.github/workflows/.*\.yml' ]]; then
               changed_addons+=("\"${addon}\",");
               echo "Including ${addon} because the build action changed"
             elif [[ "${{ steps.changed_files.outputs.all }}" =~ $addon ]]; then
