@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.2
+
+- base image upgrade to 3.18
+
 ## 1.1.1
 
 - Switched to a forever-running script in `run`
