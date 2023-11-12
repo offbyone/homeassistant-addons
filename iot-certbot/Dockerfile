@@ -25,7 +25,6 @@ RUN apk add --no-cache --virtual .build-dependencies \
         musl-dev \
         openssl-dev \
         python3-dev
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 RUN python3 -mvenv /opt/certbot
 RUN /opt/certbot/bin/python -mpip install --no-cache-dir --find-links \
         "https://wheels.home-assistant.io/alpine-$(cut -d '.' -f 1-2 < /etc/alpine-release)/${BUILD_ARCH}/" \
