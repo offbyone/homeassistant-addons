@@ -10,6 +10,3 @@ labels:
   org.opencontainers.image.description: "Use AWS IOT and LetsEncrpyt for DNS challenge certs"
   org.opencontainers.image.source: "https://github.com/offbyone/homeassistant-addons"
   org.opencontainers.image.licenses: "BSD"
-args:
-  CRYPTOGRAPHY_VERSION: 41.0.5
-  CERTBOT_VERSION: 2.7.4

@@ -7,6 +7,8 @@ ARG \
     CRYPTOGRAPHY_VERSION \
     CERTBOT_VERSION
 
+COPY requirements.txt /build/requirements.txt
+
 # py3-pip is kept in the installation because otherwise it removes some dependencies
 # that we need (six)
 RUN apk add --no-cache --update \
@@ -28,9 +30,7 @@ RUN apk add --no-cache --virtual .build-dependencies \
 RUN python3 -mvenv /opt/certbot
 RUN /opt/certbot/bin/python -mpip install --no-cache-dir --find-links \
         "https://wheels.home-assistant.io/alpine-$(cut -d '.' -f 1-2 < /etc/alpine-release)/${BUILD_ARCH}/" \
-        cryptography==${CRYPTOGRAPHY_VERSION} \
-        certbot==${CERTBOT_VERSION} \
-        certbot-dns-route53==${CERTBOT_VERSION}
+        -r /build/requirements.txt
 
 FROM $BUILD_FROM
 
